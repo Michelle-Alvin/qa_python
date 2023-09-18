@@ -2,6 +2,7 @@ import pytest
 
 from main import BooksCollector
 
+
 # класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
 # обязательно указывать префикс Test
 class TestBooksCollector:
@@ -37,29 +38,35 @@ class TestBooksCollector:
 
         assert len(collector.get_books_genre()) == 1
 
-    def test_set_book_genre_valid_genre(self):
+    @pytest.mark.parametrize('book, genre',
+                             [
+                                 ['The Great Gatsby', 'Фантастика'],
+                                 ['Wuthering Heights', 'Детективы'],
+                                 ['The Handmaid\'s', 'Ужасы'],
+                                 ['Things Fall Apart', 'Комедии'],
+                                 ['1984', 'Ужасы'],
+                                 ['Beloved', 'Мультфильмы'],
+                                 ['The Catcher in the Rye', 'Детективы']
+                             ])
+    def test_set_book_genre_valid_genre(self, book, genre):
         collector = BooksCollector()
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.set_book_genre('Гордость и предубеждение и зомби', 'Фантастика')
+        collector.add_new_book(book)
+        collector.set_book_genre(book, genre)
 
-        assert collector.get_book_genre('Гордость и предубеждение и зомби') == 'Фантастика'
+        assert collector.get_book_genre(book) == genre
 
     def test_get_book_genre_returns_correct_genre(self, list_books):
-
         assert list_books.get_book_genre('Бойцовский клуб') == 'Ужасы'
 
     def test_get_books_with_specific_genre_search_books_by_genre(self, list_books):
-
         assert list_books.get_books_with_specific_genre('Комедии') == ['Вождь краснокожих']
 
     def test_get_books_genre_dict_of_books(self, list_books):
-
         assert list_books.get_books_genre() == {'Бойцовский клуб': 'Ужасы',
                                                 'Вождь краснокожих': 'Комедии',
                                                 'Гарри Поттер': 'Фантастика'}
 
     def test_get_books_for_children(self, list_books):
-
         assert list_books.get_books_for_children() == ['Вождь краснокожих', 'Гарри Поттер']
 
     def test_add_book_in_favorites_add_two_books(self, list_books):
@@ -74,5 +81,4 @@ class TestBooksCollector:
         assert len(list_books.get_list_of_favorites_books()) == 1
 
     def test_get_list_of_favorites_books_return_list(self, list_books):
-
         assert list_books.get_list_of_favorites_books() == ['Гарри Поттер']

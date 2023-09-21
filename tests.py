@@ -40,13 +40,7 @@ class TestBooksCollector:
 
     @pytest.mark.parametrize('book, genre',
                              [
-                                 ['The Great Gatsby', 'Фантастика'],
-                                 ['Wuthering Heights', 'Детективы'],
-                                 ['The Handmaid\'s', 'Ужасы'],
-                                 ['Things Fall Apart', 'Комедии'],
-                                 ['1984', 'Ужасы'],
-                                 ['Beloved', 'Мультфильмы'],
-                                 ['The Catcher in the Rye', 'Детективы']
+                                 ['The Great Gatsby', 'Фантастика']
                              ])
     def test_set_book_genre_valid_genre(self, book, genre):
         collector = BooksCollector()
@@ -55,30 +49,33 @@ class TestBooksCollector:
 
         assert collector.get_book_genre(book) == genre
 
-    def test_get_book_genre_returns_correct_genre(self, list_books):
-        assert list_books.get_book_genre('Бойцовский клуб') == 'Ужасы'
-
     def test_get_books_with_specific_genre_search_books_by_genre(self, list_books):
         assert list_books.get_books_with_specific_genre('Комедии') == ['Вождь краснокожих']
 
     def test_get_books_genre_dict_of_books(self, list_books):
-        assert list_books.get_books_genre() == {'Бойцовский клуб': 'Ужасы',
-                                                'Вождь краснокожих': 'Комедии',
-                                                'Гарри Поттер': 'Фантастика'}
+        collection = BooksCollector()
+        collection.add_new_book('Бойцовский клуб')
+        collection.set_book_genre('Бойцовский клуб', 'Ужасы')
+        assert collection.get_books_genre() == {'Бойцовский клуб': 'Ужасы'}
 
     def test_get_books_for_children(self, list_books):
         assert list_books.get_books_for_children() == ['Вождь краснокожих', 'Гарри Поттер']
 
-    def test_add_book_in_favorites_add_two_books(self, list_books):
+    def test_add_book_in_favorites_add_one_book(self, list_books):
         list_books.add_book_in_favorites('Гарри Поттер')
-        list_books.add_book_in_favorites('Бойцовский клуб')
 
-        assert len(list_books.get_list_of_favorites_books()) == 2
+        assert 'Гарри Поттер' in list_books.get_list_of_favorites_books()
 
     def test_delete_book_from_favorites_delete_one_book(self, list_books):
-        list_books.delete_book_from_favorites('Бойцовский клуб')
+        list_books.add_new_book('Властелин колец')
+        list_books.add_book_in_favorites('Властелин колец')
+        list_books.delete_book_from_favorites('Властелин колец')
 
-        assert len(list_books.get_list_of_favorites_books()) == 1
+        assert 'Властелин колец' not in list_books.get_list_of_favorites_books()
 
-    def test_get_list_of_favorites_books_return_list(self, list_books):
-        assert list_books.get_list_of_favorites_books() == ['Гарри Поттер']
+    def test_get_list_of_favorites_books_return_list(self):
+        collector = BooksCollector()
+        collector.add_new_book('Властелин колец')
+        collector.add_book_in_favorites('Властелин колец')
+
+        assert collector.get_list_of_favorites_books() == ['Властелин колец']

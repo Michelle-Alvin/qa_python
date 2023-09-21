@@ -12,22 +12,18 @@
 3) **Добавление жанра для новой книги**
 
     *test_set_book_genre_valid_genre*
-4) **Получение жанра книги**
-
-    *test_get_book_genre_returns_correct_genre*
 5) **Поиск книг по жанру**
 
     *test_get_books_with_specific_genre_search_books_by_genre*
-
 6) **Получение словаря книг**
 
     *test_get_books_genre_dict_of_books*
 7) **Отображение списка для детей**
 
     *test_get_books_for_children*
-8) **Добавление 2 книг в избранное**
+8) **Добавление книги в избранное**
 
-    *test_add_book_in_favorites_add_two_books*
+    *test_add_book_in_favorites_add_one_book*
 9) **Удаление 1 книги из списка избранных**
 
     *test_delete_book_from_favorites_delete_one_book*
